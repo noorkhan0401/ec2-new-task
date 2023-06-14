@@ -1,0 +1,49 @@
+Create an EBS volume and mount on ec2 instance.
+----------------------------------------------------------------
+
+Step 1: Create an EC2 instance.
+Step 2: Go to the volume section and click on create volume.
+Step 3: Click the action button after selecting the volume, and then choose the attach button.
+
+Note:-Verify that the instance and the EBS volume are in the same availability zone.   
+
+Step 4: Go to Mobaxterm and take a ssh of ec2-instance.
+
+Note: - Now use the instructions below to connect to the root.
+	*sudo su -  ---->Enter
+Step 5: You can now list the disk available on your EC2 instance by firing the below command.
+	*lsblk --->Enter
+Step 6: For a detailed description of the volumes throw the below commands.
+	*fdisk –l --->Enter
+Step 7: If you want to check whether the disk is mounted to the server or not. You can use the below command.
+	*df –hT --->Enter
+Step 8: Using the following command, format the volume as xfs filesystem.
+	*mkfs -t xfs /dev/xvdf --->Enter
+Step 9:- Create an extra directory of your choice to mount out a new xfs volume. I am using the name /mnt/my-volume. You can name it something of your choice.
+	*mkdir /mnt/my-volume --->Enter
+Step 10:- Mount the volume to the /extra directory using the following command.
+	* mount /dev/xvdf /mnt/my-volume --->Enter
+Note:-
+Now with df -h command you can check whether it is mounted or not. By using the below command you can go into the extra directory and can create files.
+
+	* cd /
+	* Touch  file{1..5}.txt
+
+==>Now here is the problem if you stop and start your instance the data will be gone… So we have to permanently mount the volume.
+
+       Permanently Mount The Volume To The Instance.
+
+	Then log in to the vim editor firing the below command.
+
+	* vim /etc/fstab
+
+	Write the path where you want to mount and the filesystem you format.
+
+	*/dev/xvdf  /mnt/my-volume  xfs defaults 0 0
+
+That’s it your file is permanently mounted. Now if you stop your instance and start again your data won’t be lost.
+
+
+
+
+
